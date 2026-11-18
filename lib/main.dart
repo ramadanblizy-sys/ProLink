@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+importimport 'home_page.dart 'package:flutter/material.dart';
 
 void main() {
   runApp(const ProLinkApp());
@@ -19,7 +19,7 @@ class ProLinkApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFFF5F7FA),
       ),
-      home: home: const HomePage(),
+      home: const HomePage(),
     );
   }
 }
