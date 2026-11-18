@@ -1,4 +1,4 @@
-importimport 'register_page.dart'; 'package:flutter/material.dart';
+import'import 'search_page.dart'; register_page.dart'; 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -10,7 +10,14 @@ class HomePage extends StatelessWidget {
 
       appBar: AppBar(actions: [
   TextButton(
-    onPressed: () {
+  onPressed: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const SearchPage(),
+    ),
+  );
+},  {
       Navigator.push(
         context,
         MaterialPageRoute(
