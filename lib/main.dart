@@ -19,7 +19,7 @@ class ProLinkApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFFF5F7FA),
       ),
-      home: const HomeScreen(),
+      home: home: const HomePage(),
     );
   }
 }
