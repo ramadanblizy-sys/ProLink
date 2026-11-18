@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'professional.dart';
 
 class ProfessionalProfile extends StatelessWidget {
-  const ProfessionalProfile({super.key});
+  final Professional professional;
+
+  const ProfessionalProfile({
+    super.key,
+    required this.professional,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +34,9 @@ class ProfessionalProfile extends StatelessWidget {
 
             const SizedBox(height: 15),
 
-            const Text(
-              'Nome do profissional',
-              style: TextStyle(
+            Text(
+              professional.name,
+              style: const TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.bold,
               ),
@@ -38,16 +44,68 @@ class ProfessionalProfile extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            const Text(
-              'Profissão',
-              style: TextStyle(fontSize: 17),
+            Text(
+              professional.profession,
+              style: const TextStyle(fontSize: 17),
             ),
 
             const SizedBox(height: 25),
 
-            profileItem(Icons.phone, 'Número de telefone'),
-            profileItem(Icons.location_on, 'Localização'),
-            profileItem(Icons.work, 'Experiência profissional'),
+            profileItem(
+              Icons.phone,
+              'Telefone',
+              professional.phone,
+            ),
+
+            profileItem(
+              Icons.location_on,
+              'Província',
+              professional.province,
+            ),
+
+            profileItem(
+              Icons.map,
+              'Distrito',
+              professional.district,
+            ),
+
+            profileItem(
+              Icons.home,
+              'Bairro',
+              professional.neighborhood,
+            ),
+
+            profileItem(
+              Icons.work,
+              'Experiência',
+              professional.experience.isEmpty
+                  ? 'Não informada'
+                  : professional.experience,
+            ),
+
+            const SizedBox(height: 15),
+
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Sobre o profissional',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                professional.description.isEmpty
+                    ? 'Sem descrição disponível.'
+                    : professional.description,
+              ),
+            ),
 
             const SizedBox(height: 20),
 
@@ -64,10 +122,23 @@ class ProfessionalProfile extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            const Text(
-              'O profissional poderá adicionar fotografias '
-              'dos seus trabalhos, se desejar.',
-            ),
+            if (professional.workPhotos.isEmpty)
+              const Text(
+                'Nenhuma fotografia adicionada.',
+              )
+            else
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: professional.workPhotos.map(
+                  (photo) => Image.network(
+                    photo,
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.cover,
+                  ),
+                ).toList(),
+              ),
 
             const SizedBox(height: 25),
 
@@ -75,7 +146,16 @@ class ProfessionalProfile extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Contacte ${professional.name} '
+                        'pelo número ${professional.phone}.',
+                      ),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.phone),
                 label: const Text('Contactar profissional'),
                 style: ElevatedButton.styleFrom(
@@ -90,13 +170,18 @@ class ProfessionalProfile extends StatelessWidget {
     );
   }
 
-  Widget profileItem(IconData icon, String title) {
+  Widget profileItem(
+    IconData icon,
+    String title,
+    String value,
+  ) {
     return ListTile(
       leading: Icon(
         icon,
         color: const Color(0xFF123B65),
       ),
       title: Text(title),
+      subtitle: Text(value),
     );
   }
 }
