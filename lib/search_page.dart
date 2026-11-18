@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'professional_data.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -13,6 +14,9 @@ class _SearchPageState extends State<SearchPage> {
   final districtController = TextEditingController();
   final neighborhoodController = TextEditingController();
 
+  List<Professional> results = [];
+  bool hasSearched = false;
+
   @override
   void dispose() {
     professionController.dispose();
@@ -20,6 +24,24 @@ class _SearchPageState extends State<SearchPage> {
     districtController.dispose();
     neighborhoodController.dispose();
     super.dispose();
+  }
+
+  void searchProfessionals() {
+    final profession = professionController.text.trim().toLowerCase();
+    final province = provinceController.text.trim().toLowerCase();
+    final district = districtController.text.trim().toLowerCase();
+    final neighborhood = neighborhoodController.text.trim().toLowerCase();
+
+    setState(() {
+      results = professionals.where((professional) {
+        return professional.profession.toLowerCase().contains(profession) &&
+            professional.province.toLowerCase().contains(province) &&
+            professional.district.toLowerCase().contains(district) &&
+            professional.neighborhood.toLowerCase().contains(neighborhood);
+      }).toList();
+
+      hasSearched = true;
+    });
   }
 
   @override
@@ -30,7 +52,6 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: const Color(0xFF123B65),
         foregroundColor: Colors.white,
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -52,29 +73,10 @@ class _SearchPageState extends State<SearchPage> {
 
             const SizedBox(height: 25),
 
-            searchField(
-              'Profissão',
-              Icons.work,
-              professionController,
-            ),
-
-            searchField(
-              'Província',
-              Icons.location_on,
-              provinceController,
-            ),
-
-            searchField(
-              'Distrito',
-              Icons.map,
-              districtController,
-            ),
-
-            searchField(
-              'Bairro',
-              Icons.home,
-              neighborhoodController,
-            ),
+            searchField('Profissão', Icons.work, professionController),
+            searchField('Província', Icons.location_on, provinceController),
+            searchField('Distrito', Icons.map, districtController),
+            searchField('Bairro', Icons.home, neighborhoodController),
 
             const SizedBox(height: 20),
 
@@ -82,15 +84,7 @@ class _SearchPageState extends State<SearchPage> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'A pesquisa será ligada à base de dados na próxima fase.',
-                      ),
-                    ),
-                  );
-                },
+                onPressed: searchProfessionals,
                 icon: const Icon(Icons.search),
                 label: const Text('Pesquisar'),
                 style: ElevatedButton.styleFrom(
@@ -99,6 +93,45 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
             ),
+
+            const SizedBox(height: 25),
+
+            if (hasSearched) ...[
+              const Text(
+                'Resultados da pesquisa',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              if (results.isEmpty)
+                const Text(
+                  'Nenhum profissional encontrado. '
+                  'Verifique os dados e tente novamente.',
+                ),
+
+              ...results.map(
+                (professional) => Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: ListTile(
+                    leading: const CircleAvatar(
+                      child: Icon(Icons.person),
+                    ),
+                    title: Text(professional.name),
+                    subtitle: Text(
+                      '${professional.profession}\n'
+                      '${professional.province}, '
+                      '${professional.district}, '
+                      '${professional.neighborhood}',
+                    ),
+                    isThreeLine: true,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
