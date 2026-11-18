@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+importimport 'register_page.dart'; 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,7 +8,22 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
 
-      appBar: AppBar(
+      appBar: AppBar(actions: [
+  TextButton(
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const RegisterPage(),
+        ),
+      );
+    },
+    child: const Text(
+      'Registar',
+      style: TextStyle(color: Colors.white),
+    ),
+  ),
+],
         backgroundColor: const Color(0xFF123B65),
         title: const Text(
           'ProLink',
