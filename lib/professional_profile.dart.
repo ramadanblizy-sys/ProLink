@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'professional.dart';
-
+import 'chat_page.dart';
 class ProfessionalProfile extends StatelessWidget {
   final Professional professional;
 
@@ -147,15 +147,18 @@ class ProfessionalProfile extends StatelessWidget {
               height: 50,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Contacte ${professional.name} '
-                        'pelo número ${professional.phone}.',
-                      ),
-                    ),
-                  );
-                },
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ChatPage(
+        receiverId: professional.id,
+        receiverName: professional.name,
+        currentUserId: 'cliente_demo',
+        conversationId: 'cliente_demo_${professional.id}',
+      ),
+    ),
+  );
+},
                 icon: const Icon(Icons.phone),
                 label: const Text('Contactar profissional'),
                 style: ElevatedButton.styleFrom(
