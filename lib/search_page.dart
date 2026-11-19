@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'professional_data.dart';
-
+import 'professional_profile.dart';
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
@@ -112,25 +112,36 @@ class _SearchPageState extends State<SearchPage> {
                   'Nenhum profissional encontrado. '
                   'Verifique os dados e tente novamente.',
                 ),
-
-              ...results.map(
-                (professional) => Card(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: ListTile(
-                    leading: const CircleAvatar(
-                      child: Icon(Icons.person),
-                    ),
-                    title: Text(professional.name),
-                    subtitle: Text(
-                      '${professional.profession}\n'
-                      '${professional.province}, '
-                      '${professional.district}, '
-                      '${professional.neighborhood}',
-                    ),
-                    isThreeLine: true,
-                  ),
-                ),
-              ),
+...results.map(
+  (professional) => Card(
+    margin: const EdgeInsets.only(bottom: 12),
+    child: ListTile(
+      leading: const CircleAvatar(
+        child: Icon(Icons.person),
+      ),
+      title: Text(professional.name),
+      subtitle: Text(
+        '${professional.profession}\n'
+        '${professional.province}, '
+        '${professional.district}, '
+        '${professional.neighborhood}',
+      ),
+      isThreeLine: true,
+      trailing: const Icon(Icons.arrow_forward_ios),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfessionalProfile(
+              professional: professional,
+            ),
+          ),
+        );
+      },
+    ),
+  ),
+),
+              
             ],
           ],
         ),
