@@ -1,4 +1,10 @@
-import'import 'search_page.dart'; register_page.dart'; 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'search_page.dart';
+import 'register_page.dart';
+import 'professional_profile.dart';
+import 'professional_data.dart';
+import 'chat_list_page.dart';
+import 'professional.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,30 +14,9 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
 
-      appBar: AppBar(actions: [
-  TextButton(
-  onPressed: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const SearchPage(),
-    ),
-  );
-},  {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const RegisterPage(),
-        ),
-      );
-    },
-    child: const Text(
-      'Registar',
-      style: TextStyle(color: Colors.white),
-    ),
-  ),
-],
+      appBar: AppBar(
         backgroundColor: const Color(0xFF123B65),
+
         title: const Text(
           'ProLink',
           style: TextStyle(
@@ -40,7 +25,39 @@ class HomePage extends StatelessWidget {
             fontSize: 25,
           ),
         ),
-        centerTitle: false,
+
+        actions: [
+          IconButton(
+            tooltip: 'Minhas conversas',
+            icon: const Icon(
+              Icons.chat,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ChatListPage(),
+                ),
+              );
+            },
+          ),
+
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RegisterPage(),
+                ),
+              );
+            },
+            child: const Text(
+              'Registar',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
 
       body: SingleChildScrollView(
@@ -109,7 +126,14 @@ class HomePage extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SearchPage(),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF123B65),
                   foregroundColor: Colors.white,
@@ -133,22 +157,11 @@ class HomePage extends StatelessWidget {
 
             const SizedBox(height: 15),
 
-            professionalCard(
-              Icons.build,
-              'Técnico de Construção',
-              'Disponível para serviços',
-            ),
-
-            professionalCard(
-              Icons.electrical_services,
-              'Electricista',
-              'Disponível para serviços',
-            ),
-
-            professionalCard(
-              Icons.plumbing,
-              'Canalizador',
-              'Disponível para serviços',
+            ...professionals.map(
+              (professional) => professionalCard(
+                context,
+                professional,
+              ),
             ),
           ],
         ),
@@ -172,31 +185,45 @@ class HomePage extends StatelessWidget {
   }
 
   Widget professionalCard(
-    IconData icon,
-    String name,
-    String description,
+    BuildContext context,
+    Professional professional,
   ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
+
       child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: const Color(0xFFE1EBF5),
-          child: Icon(icon, color: const Color(0xFF123B65)),
+        leading: const CircleAvatar(
+          backgroundColor: Color(0xFFE1EBF5),
+          child: Icon(
+            Icons.work,
+            color: Color(0xFF123B65),
+          ),
         ),
+
         title: Text(
-          name,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          professional.name,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        subtitle: Text(description),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-onTap: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const ProfessionalProfile(),
-    ),
-  );
-},
+
+        subtitle: Text(professional.profession),
+
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          size: 16,
+        ),
+
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfessionalProfile(
+                professional: professional,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
